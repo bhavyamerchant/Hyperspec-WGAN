@@ -37,4 +37,4 @@ pylint = "*"
 max-line-length = "88"
 
 [tool.pylint.messages_control]
-disable = "no-self-use, too-many-arguments"
+disable = "duplicate-code, no-self-use, too-many-arguments"
