@@ -1,0 +1,40 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+known_third_party = "kedro"
+
+[tool.kedro]
+package_name = "hyperspec_wgan"
+project_name = "hyperspec-wgan"
+project_version = "0.17.0"
+
+[tool.poetry]
+name = "hyperspec-wgan"
+version = "0.1.0"
+description = "Data Augmentation using a Generative Adversarial Network for Improved HSI Classification"
+authors = ["bhavyamerchant <collaboratory@bnmerchant.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+kedro = "*"
+kedro-viz = {version = "*", optional = true}
+numpy = "*"
+python = "~3.8"
+scikit-learn = "*"
+seaborn = "*"
+torch = "*"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+isort = "*"
+mypy = "*"
+pylint = "*"
+
+[tool.pylint.format]
+max-line-length = "88"
+
+[tool.pylint.messages_control]
+disable = "no-self-use, too-many-arguments"
