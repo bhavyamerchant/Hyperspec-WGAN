@@ -13,7 +13,7 @@ project_version = "0.17.1"
 
 [tool.poetry]
 name = "hyperspec-wgan"
-version = "0.1.0"
+version = "0.2.0"
 description = "Data Augmentation using a Generative Adversarial Network for Improved HSI Classification"
 authors = ["bhavyamerchant <collaboratory@bnmerchant.com>"]
 license = "MIT"
@@ -38,3 +38,4 @@ max-line-length = "88"
 
 [tool.pylint.messages_control]
 disable = "duplicate-code, no-self-use, too-many-arguments"
+good-names = "x, y"

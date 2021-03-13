@@ -35,6 +35,12 @@ from kedro.framework.hooks.markers import hook_impl
 from kedro.io.data_catalog import DataCatalog
 from kedro.pipeline.pipeline import Pipeline
 
+from hyperspec_wgan.pipelines.data_engineering.pipeline import data_engineering_pipeline
+from hyperspec_wgan.pipelines.data_science.pipeline import data_science_pipeline
+from hyperspec_wgan.pipelines.data_visualization.pipeline import (
+    data_visualization_pipeline,
+)
+
 
 class ProjectHooks:
     """Hook the project's pipeline, config files, and data catalog."""
@@ -42,7 +48,14 @@ class ProjectHooks:
     @hook_impl
     def register_pipelines(self) -> Dict[str, Pipeline]:
         """Register the project's pipeline."""
-        return {}
+        return {
+            "data_engineering": data_engineering_pipeline(),
+            "data_science": data_science_pipeline(),
+            "data_visualization": data_visualization_pipeline(),
+            "__default__": data_engineering_pipeline()
+            + data_science_pipeline()
+            + data_visualization_pipeline(),
+        }
 
     @hook_impl
     def register_config_loader(self, conf_paths: Iterable[str]) -> ConfigLoader:

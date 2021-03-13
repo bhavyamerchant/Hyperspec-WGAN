@@ -26,34 +26,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Custom dataset module for NumPy files to be used with DataCatalog."""
+"""Pipeline structure for data visualization tasks."""
 
-from pathlib import PurePath
-from typing import Any, Dict, Union
+from kedro.pipeline.node import node
+from kedro.pipeline.pipeline import Pipeline
 
-import fsspec
-import numpy as np
-from kedro.io.core import AbstractDataSet, get_filepath_str, get_protocol_and_path
+from .nodes import plot_pca
 
 
-class NumpyDataSet(AbstractDataSet):
-    """Load and save data with NumPy files."""
-
-    def __init__(self, filepath: str) -> None:
-        protocol, path = get_protocol_and_path(filepath=filepath)
-        self._protocol = protocol
-        self._filepath = PurePath(path)
-        self._filesystem = fsspec.filesystem(protocol=protocol)
-
-    def _load(self) -> Any:
-        filepath = get_filepath_str(path=self._filepath, protocol=self._protocol)
-        with self._filesystem.open(path=filepath) as openfile:
-            return np.load(file=openfile)
-
-    def _save(self, data: np.ndarray) -> Any:
-        filepath = get_filepath_str(path=self._filepath, protocol=self._protocol)
-        with self._filesystem.open(path=filepath, mode="wb") as openfile:
-            return np.save(file=openfile, arr=data)
-
-    def _describe(self) -> Dict[str, Union[PurePath, str]]:
-        return dict(filepath=self._filepath, protocol=self._protocol)
+def data_visualization_pipeline() -> Pipeline:
+    """Create the data visualization pipeline."""
+    return Pipeline(
+        nodes=[
+            node(
+                func=plot_pca,
+                inputs={
+                    "x": "model_output_pca_x",
+                    "y": "primary_classified_y",
+                    "variance": "model_output_pca_variance",
+                    "scene_name": "params:scene_name",
+                    "labels": "params:labels",
+                    "palette": "params:graph_palette",
+                    "aspect": "params:graph_aspect",
+                },
+                outputs="reporting_pca",
+                name="plot-pca",
+                tags="pca",
+            )
+        ]
+    )

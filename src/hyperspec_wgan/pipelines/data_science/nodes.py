@@ -26,34 +26,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Custom dataset module for NumPy files to be used with DataCatalog."""
+"""Node definitions for data science tasks."""
 
-from pathlib import PurePath
-from typing import Any, Dict, Union
+from typing import Dict
 
-import fsspec
 import numpy as np
-from kedro.io.core import AbstractDataSet, get_filepath_str, get_protocol_and_path
+from sklearn.decomposition import PCA
 
 
-class NumpyDataSet(AbstractDataSet):
-    """Load and save data with NumPy files."""
-
-    def __init__(self, filepath: str) -> None:
-        protocol, path = get_protocol_and_path(filepath=filepath)
-        self._protocol = protocol
-        self._filepath = PurePath(path)
-        self._filesystem = fsspec.filesystem(protocol=protocol)
-
-    def _load(self) -> Any:
-        filepath = get_filepath_str(path=self._filepath, protocol=self._protocol)
-        with self._filesystem.open(path=filepath) as openfile:
-            return np.load(file=openfile)
-
-    def _save(self, data: np.ndarray) -> Any:
-        filepath = get_filepath_str(path=self._filepath, protocol=self._protocol)
-        with self._filesystem.open(path=filepath, mode="wb") as openfile:
-            return np.save(file=openfile, arr=data)
-
-    def _describe(self) -> Dict[str, Union[PurePath, str]]:
-        return dict(filepath=self._filepath, protocol=self._protocol)
+def fit_pca(x: np.ndarray, n_components: float, whiten: bool) -> Dict[str, np.ndarray]:
+    """Fit a PCA model to the samples."""
+    model = PCA(n_components=n_components, whiten=whiten)
+    return dict(x=model.fit_transform(X=x), variance=model.explained_variance_ratio_)

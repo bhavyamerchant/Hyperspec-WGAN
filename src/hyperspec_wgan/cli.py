@@ -171,7 +171,7 @@ def run(
     is_async: bool,
     env: str,
     params: Dict[str, Any],
-    _config: click.Path,
+    config: click.Path,  # pylint: disable=unused-argument
 ) -> None:
     """Run the pipeline."""
     runner_class = load_obj(obj_path=runner, default_obj_path="kedro.runner")

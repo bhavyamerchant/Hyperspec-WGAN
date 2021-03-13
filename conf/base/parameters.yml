@@ -1,0 +1,10 @@
+# Data Science Pipeline #
+
+## fit-pca ##
+n_components: 15
+whiten: True
+
+# Data Visualization Parameters #
+graph_aspect: 
+  - 6.5
+  - 4.5

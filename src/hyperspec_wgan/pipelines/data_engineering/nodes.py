@@ -26,34 +26,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Custom dataset module for NumPy files to be used with DataCatalog."""
+"""Node definitions for data engineering tasks."""
 
-from pathlib import PurePath
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
-import fsspec
 import numpy as np
-from kedro.io.core import AbstractDataSet, get_filepath_str, get_protocol_and_path
+from sklearn.preprocessing import maxabs_scale
 
 
-class NumpyDataSet(AbstractDataSet):
-    """Load and save data with NumPy files."""
+def extract(data: Dict[str, np.ndarray]) -> np.ndarray:
+    """Extract NumPy data from a `dict`."""
+    return list(data.values())[-1]
 
-    def __init__(self, filepath: str) -> None:
-        protocol, path = get_protocol_and_path(filepath=filepath)
-        self._protocol = protocol
-        self._filepath = PurePath(path)
-        self._filesystem = fsspec.filesystem(protocol=protocol)
 
-    def _load(self) -> Any:
-        filepath = get_filepath_str(path=self._filepath, protocol=self._protocol)
-        with self._filesystem.open(path=filepath) as openfile:
-            return np.load(file=openfile)
+def reshape(x: np.ndarray, y: np.ndarray) -> Dict[str, np.ndarray]:
+    """Reshape the samples into a 2-D array and the classifications into a 1-D array."""
+    x = np.reshape(a=x, newshape=(-1, x.shape[2]))
+    y = np.reshape(a=y, newshape=-1)
+    return dict(x=x, y=y)
 
-    def _save(self, data: np.ndarray) -> Any:
-        filepath = get_filepath_str(path=self._filepath, protocol=self._protocol)
-        with self._filesystem.open(path=filepath, mode="wb") as openfile:
-            return np.save(file=openfile, arr=data)
 
-    def _describe(self) -> Dict[str, Union[PurePath, str]]:
-        return dict(filepath=self._filepath, protocol=self._protocol)
+def scale(x: np.ndarray) -> Any:
+    """Scale samples to the [-1, 1] range without breaking the sparsity."""
+    return maxabs_scale(X=x)
+
+
+def separate(x: np.ndarray, y: np.ndarray) -> Dict[str, np.ndarray]:
+    """Separate classified and unclassified samples within the dataset."""
+    classified_x = x[y != 0, :]
+    unclassified_x = x[y == 0, :]
+    classified_y = y[y != 0]
+    unclassified_y = y[y == 0]
+    return dict(
+        classified_x=classified_x,
+        unclassified_x=unclassified_x,
+        classified_y=classified_y,
+        unclassified_y=unclassified_y,
+    )

@@ -1,0 +1,38 @@
+# Data Visualization Parameters
+scene_name: Indian Pines
+labels:
+  0: Unlabeled
+  1: Alfalfa
+  2: Corn-notill
+  3: Corn-mintill
+  4: Corn
+  5: Grass-pasture
+  6: Grass-trees
+  7: Grass-pasture-mowed
+  8: Hay-windrowed
+  9: Oats
+  10: Soybean-notill
+  11: Soybean-mintill
+  12: Soybean-clean
+  13: Wheat
+  14: Woods
+  15: Buildings-Grass-Trees-Drives
+  16: Stone-Steel-Towers
+graph_palette:
+  0: "#FFF9D9"
+  1: "#E1DDC6"
+  2: "#C3C2B3"
+  3: "#A5A6A0"
+  4: "#888B8D"
+  5: "#986C75"
+  6: "#A84D5D"
+  7: "#B82E45"
+  8: "#C8102E"
+  9: "#D33B22"
+  10: "#DF6717"
+  11: "#EA920B"
+  12: "#F6BE00"
+  13: "#B8BB22"
+  14: "#7BB844"
+  15: "#3DB566"
+  16: "#00B388"

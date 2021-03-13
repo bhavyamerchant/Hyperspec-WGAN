@@ -1,0 +1,44 @@
+# Raw
+raw_image:
+  type: hyperspec_wgan.extras.datasets.matlab.MatlabDataSet
+  filepath: data/01_raw/pavia_university/image.mat
+raw_ground_truth:
+  type: hyperspec_wgan.extras.datasets.matlab.MatlabDataSet
+  filepath: data/01_raw/pavia_university/ground_truth.mat
+
+# Intermediate
+intermediate_x:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/02_intermediate/pavia_university/x.npy
+intermediate_y:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/02_intermediate/pavia_university/y.npy
+
+# Primary
+primary_classified_x:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/03_primary/pavia_university/classified_x.npy
+primary_unclassified_x:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/03_primary/pavia_university/unclassified_x.npy
+primary_classified_y:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/03_primary/pavia_university/classified_y.npy
+primary_unclassified_y:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/03_primary/pavia_university/unclassified_y.npy
+
+# Model Output
+model_output_pca_x:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/07_model_output/pavia_university/pca_x.npy
+model_output_pca_variance:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/07_model_output/pavia_university/pca_variance.npy
+
+# Reporting
+reporting_pca:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/pavia_university/pca_projection.svg
+  save_args:
+    format: svg
