@@ -28,7 +28,7 @@
 
 """Kedro project settings."""
 
-from hyperspec_wgan.hooks import ProjectHooks
+from .hooks import ProjectHooks
 
 # Instantiate and list your project hooks here
 HOOKS = (ProjectHooks(),)

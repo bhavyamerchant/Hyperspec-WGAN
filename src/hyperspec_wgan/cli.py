@@ -44,6 +44,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 PROJ_PATH = Path(__file__).resolve().parent
 
 FROM_INPUTS_HELP = """A list of dataset names to be used as a starting point."""
+TO_OUTPUTS_HELP = """A list of dataset names which should be used as an end point."""
 FROM_NODES_HELP = """A list of node names to be used as a starting point."""
 TO_NODES_HELP = """A list of node names to be used as an end point."""
 NODE_HELP = """Run only nodes with these specified names."""
@@ -135,6 +136,9 @@ def cli() -> None:
     "--from-inputs", type=str, default="", help=FROM_INPUTS_HELP, callback=_split_string
 )
 @click.option(
+    "--to-outputs", type=str, default="", help=TO_OUTPUTS_HELP, callback=_split_string
+)
+@click.option(
     "--from-nodes", type=str, default="", help=FROM_NODES_HELP, callback=_split_string
 )
 @click.option(
@@ -157,6 +161,7 @@ def cli() -> None:
 )
 def run(
     from_inputs: Iterable[str],
+    to_outputs: Iterable[str],
     from_nodes: Iterable[str],
     to_nodes: Iterable[str],
     node_names: Iterable[str],
@@ -183,6 +188,7 @@ def run(
             from_nodes=from_nodes,
             to_nodes=to_nodes,
             from_inputs=from_inputs,
+            to_outputs=to_outputs,
             pipeline_name=pipeline,
         )
 
