@@ -4,6 +4,12 @@
 n_components: 15
 whiten: True
 
+## fit-tsne ##
+perplexity: 15
+early_exaggeration: 10
+learning_rate: 250
+iterations: 500
+
 # Data Visualization Parameters #
 graph_aspect: 
   - 6.5

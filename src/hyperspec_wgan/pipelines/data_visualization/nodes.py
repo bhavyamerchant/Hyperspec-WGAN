@@ -93,3 +93,29 @@ def plot_pca(
             yticks=[],
         )
     return graph
+
+
+def plot_tsne(
+    x: np.ndarray,
+    y: np.ndarray,
+    scene_name: str,
+    labels: Dict[str, str],
+    palette: Dict[str, str],
+    aspect: List[float],
+) -> sns.FacetGrid:
+    """Plot the t-SNE results."""
+    with sns.plotting_context(context="paper"):
+        graph = _plot_scatterplot(x=x, y=y, palette=palette, aspect=aspect)
+        _plot_colorbar(
+            figure=graph.fig,
+            palette=[*palette.values()][1:],
+            labels=[*labels.values()][1:],
+        )
+        graph.set(
+            title=f"{scene_name} t-SNE Projection",
+            xlabel="t-SNE Component 1",
+            xticks=[],
+            ylabel="t-SNE Component 2",
+            yticks=[],
+        )
+    return graph

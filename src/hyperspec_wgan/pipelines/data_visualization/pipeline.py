@@ -31,7 +31,7 @@
 from kedro.pipeline.node import node
 from kedro.pipeline.pipeline import Pipeline
 
-from .nodes import plot_pca
+from .nodes import plot_pca, plot_tsne
 
 
 def data_visualization_pipeline() -> Pipeline:
@@ -52,6 +52,20 @@ def data_visualization_pipeline() -> Pipeline:
                 outputs="reporting_pca",
                 name="plot-pca",
                 tags="pca",
-            )
+            ),
+            node(
+                func=plot_tsne,
+                inputs={
+                    "x": "model_output_tsne_x",
+                    "y": "primary_classified_y",
+                    "scene_name": "params:scene_name",
+                    "labels": "params:labels",
+                    "palette": "params:graph_palette",
+                    "aspect": "params:graph_aspect",
+                },
+                outputs="reporting_tsne",
+                name="plot-tsne",
+                tags="tsne",
+            ),
         ]
     )

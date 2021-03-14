@@ -31,7 +31,7 @@
 from kedro.pipeline.node import node
 from kedro.pipeline.pipeline import Pipeline
 
-from .nodes import fit_pca
+from .nodes import fit_pca, fit_tsne
 
 
 def data_science_pipeline() -> Pipeline:
@@ -51,6 +51,19 @@ def data_science_pipeline() -> Pipeline:
                 },
                 name="fit-pca",
                 tags="pca",
-            )
+            ),
+            node(
+                func=fit_tsne,
+                inputs={
+                    "x": "primary_classified_x",
+                    "perplexity": "params:perplexity",
+                    "early_exaggeration": "params:early_exaggeration",
+                    "learning_rate": "params:learning_rate",
+                    "iterations": "params:iterations",
+                },
+                outputs="model_output_tsne_x",
+                name="fit-tsne",
+                tags="tsne",
+            ),
         ]
     )

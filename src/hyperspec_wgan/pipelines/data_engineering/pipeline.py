@@ -43,14 +43,14 @@ def data_engineering_pipeline() -> Pipeline:
                 inputs="raw_image",
                 outputs="intermediate_x",
                 name="extract-image",
-                tags="pca",
+                tags=["pca", "tsne"],
             ),
             node(
                 func=extract,
                 inputs="raw_ground_truth",
                 outputs="intermediate_y",
                 name="extract-ground-truth",
-                tags="pca",
+                tags=["pca", "tsne"],
             ),
             node(
                 func=reshape,
@@ -60,14 +60,14 @@ def data_engineering_pipeline() -> Pipeline:
                 },
                 outputs={"x": "reshape_x", "y": "reshape_y"},
                 name="reshape-intermediate-dataset",
-                tags="pca",
+                tags=["pca", "tsne"],
             ),
             node(
                 func=scale,
                 inputs="reshape_x",
                 outputs="scale_x",
                 name="scale-samples",
-                tags="pca",
+                tags=["pca", "tsne"],
             ),
             node(
                 func=separate,
@@ -79,7 +79,7 @@ def data_engineering_pipeline() -> Pipeline:
                     "unclassified_y": "primary_unclassified_y",
                 },
                 name="separate-data",
-                tags="pca",
+                tags=["pca", "tsne"],
             ),
         ]
     )

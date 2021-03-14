@@ -35,10 +35,18 @@ model_output_pca_x:
 model_output_pca_variance:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
   filepath: data/07_model_output/pavia_university/pca_variance.npy
+model_output_tsne_x:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/07_model_output/pavia_university/tsne_x.npy
 
 # Reporting
 reporting_pca:
   type: matplotlib.MatplotlibWriter
   filepath: data/08_reporting/pavia_university/pca_projection.svg
+  save_args:
+    format: svg
+reporting_tsne:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/pavia_university/tsne_projection.svg
   save_args:
     format: svg
