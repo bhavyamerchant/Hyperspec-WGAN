@@ -1,4 +1,4 @@
-# Copyright 2020 QuantumBlack Visual Analytics Limited
+# Copyright 2021 QuantumBlack Visual Analytics Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,36 +26,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Kedro project hooks."""
+"""Project hooks."""
 
 from typing import Any, Dict, Iterable, Optional
 
 from kedro.config.config import ConfigLoader
 from kedro.framework.hooks.markers import hook_impl
 from kedro.io.data_catalog import DataCatalog
-from kedro.pipeline.pipeline import Pipeline
-
-from hyperspec_wgan.pipelines.data_engineering.pipeline import data_engineering_pipeline
-from hyperspec_wgan.pipelines.data_science.pipeline import data_science_pipeline
-from hyperspec_wgan.pipelines.data_visualization.pipeline import (
-    data_visualization_pipeline,
-)
 
 
 class ProjectHooks:
-    """Hook the project's pipeline, config files, and data catalog."""
-
-    @hook_impl
-    def register_pipelines(self) -> Dict[str, Pipeline]:
-        """Register the project's pipeline."""
-        return {
-            "data_engineering": data_engineering_pipeline(),
-            "data_science": data_science_pipeline(),
-            "data_visualization": data_visualization_pipeline(),
-            "__default__": data_engineering_pipeline()
-            + data_science_pipeline()
-            + data_visualization_pipeline(),
-        }
+    """Hook the project's config files and data catalog."""
 
     @hook_impl
     def register_config_loader(self, conf_paths: Iterable[str]) -> ConfigLoader:

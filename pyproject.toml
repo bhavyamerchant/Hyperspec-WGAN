@@ -9,7 +9,7 @@ known_third_party = "kedro"
 [tool.kedro]
 package_name = "hyperspec_wgan"
 project_name = "hyperspec-wgan"
-project_version = "0.17.1"
+project_version = "0.17.2"
 
 [tool.poetry]
 name = "hyperspec-wgan"

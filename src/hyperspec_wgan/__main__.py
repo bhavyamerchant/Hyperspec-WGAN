@@ -26,35 +26,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Node definitions for data science tasks."""
+"""Execute package as `hyperspec-wgan` and `python -m hyperspec-wgan`"""
 
-from typing import Any, Dict
+from pathlib import Path
 
-import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
+from kedro.framework.project import configure_project
 
-
-def fit_pca(x: np.ndarray, n_components: float, whiten: bool) -> Dict[str, np.ndarray]:
-    """Fit a PCA model to the data."""
-    model = PCA(n_components=n_components, whiten=whiten)
-    return dict(x=model.fit_transform(X=x), variance=model.explained_variance_ratio_)
+from .cli import run
 
 
-def fit_tsne(
-    x: np.ndarray,
-    perplexity: float,
-    early_exaggeration: int,
-    learning_rate: float,
-    iterations: int,
-) -> Any:
-    """Fit a t-SNE model to the data."""
-    model = TSNE(
-        perplexity=perplexity,
-        early_exaggeration=early_exaggeration,
-        learning_rate=learning_rate,
-        n_iter=iterations,
-        random_state=42,
-        n_jobs=-1,
-    )
-    return model.fit_transform(X=x)
+def main() -> None:
+    """Main function."""
+    configure_project(Path(__file__).parent.name)
+    run()  # pylint: disable=no-value-for-parameter
+
+
+if __name__ == "__main__":
+    main()

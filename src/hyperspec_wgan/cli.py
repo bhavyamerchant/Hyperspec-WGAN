@@ -1,4 +1,4 @@
-# Copyright 2020 QuantumBlack Visual Analytics Limited
+# Copyright 2021 QuantumBlack Visual Analytics Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,14 +28,12 @@
 
 """Command line tools intended to be invoked via `kedro`."""
 
-import os
 from itertools import chain
 from pathlib import Path
 from typing import Any, Dict, Iterable, Tuple, Union
 
 import click
 from kedro.framework.cli.catalog import catalog as catalog_group
-from kedro.framework.cli.cli import main as kedro_main
 from kedro.framework.cli.pipeline import pipeline as pipeline_group
 from kedro.framework.session.session import KedroSession
 from kedro.utils import load_obj
@@ -195,7 +193,3 @@ def run(
 
 cli.add_command(catalog_group)
 cli.add_command(pipeline_group)
-
-if __name__ == "__main__":
-    os.chdir(str(PROJ_PATH))
-    kedro_main()

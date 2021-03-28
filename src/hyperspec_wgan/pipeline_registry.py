@@ -26,35 +26,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Node definitions for data science tasks."""
+"""Project pipelines."""
 
-from typing import Any, Dict
+from typing import Dict
 
-import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
+from kedro.pipeline.pipeline import Pipeline
 
-
-def fit_pca(x: np.ndarray, n_components: float, whiten: bool) -> Dict[str, np.ndarray]:
-    """Fit a PCA model to the data."""
-    model = PCA(n_components=n_components, whiten=whiten)
-    return dict(x=model.fit_transform(X=x), variance=model.explained_variance_ratio_)
+from hyperspec_wgan.pipelines.data_engineering.pipeline import data_engineering_pipeline
+from hyperspec_wgan.pipelines.data_science.pipeline import data_science_pipeline
+from hyperspec_wgan.pipelines.data_visualization.pipeline import (
+    data_visualization_pipeline,
+)
 
 
-def fit_tsne(
-    x: np.ndarray,
-    perplexity: float,
-    early_exaggeration: int,
-    learning_rate: float,
-    iterations: int,
-) -> Any:
-    """Fit a t-SNE model to the data."""
-    model = TSNE(
-        perplexity=perplexity,
-        early_exaggeration=early_exaggeration,
-        learning_rate=learning_rate,
-        n_iter=iterations,
-        random_state=42,
-        n_jobs=-1,
-    )
-    return model.fit_transform(X=x)
+def register_pipelines() -> Dict[str, Pipeline]:
+    """Register the project's pipelines."""
+    return {
+        "data_engineering": data_engineering_pipeline(),
+        "data_science": data_science_pipeline(),
+        "data_visualization": data_visualization_pipeline(),
+        "__default__": data_engineering_pipeline()
+        + data_science_pipeline()
+        + data_visualization_pipeline(),
+    }
