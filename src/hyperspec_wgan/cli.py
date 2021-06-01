@@ -28,18 +28,17 @@
 
 """Command line tools intended to be invoked via `kedro`."""
 
+import subprocess
 from itertools import chain
 from pathlib import Path
-from typing import Any, Dict, Iterable, Tuple, Union
+from typing import Any, Dict, Iterable, Tuple
 
 import click
-from kedro.framework.cli.catalog import catalog as catalog_group
-from kedro.framework.cli.pipeline import pipeline as pipeline_group
+from kedro.framework.cli.utils import _config_file_callback, _split_params, split_string
 from kedro.framework.session.session import KedroSession
 from kedro.utils import load_obj
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
-PROJ_PATH = Path(__file__).resolve().parent
 
 FROM_INPUTS_HELP = """A list of dataset names to be used as a starting point."""
 TO_OUTPUTS_HELP = """A list of dataset names which should be used as an end point."""
@@ -64,64 +63,8 @@ command arguments from. If command line arguments are provided, they will
 override the loaded ones."""
 
 
-def _split_string(
-    _ctx: click.Context,
-    _param: click.Parameter,
-    value: str,
-) -> Union[Iterable[str], str]:
-    return [item.strip() for item in value.split(",") if item.strip()]
-
-
-def _try_convert_to_numeric(value: Union[float, int, str]) -> Union[float, int, str]:
-    try:
-        value = float(x=value)
-    except ValueError:
-        return value
-    return int(x=value) if value.is_integer() else value
-
-
-def _split_params(
-    ctx: click.Context, param: click.Parameter, value: str
-) -> Dict[str, Any]:
-    if isinstance(value, dict):
-        return value
-    result = {}
-    for item in _split_string(ctx, param, value):
-        itemlist = item.split(":", 1)
-        if len(itemlist) != 2:
-            ctx.fail(
-                f"Invalid format of `{param.name}` option: "
-                f"Item `{itemlist[0]}` must contain a key and a value separated by `:`."
-            )
-        key = itemlist[0].strip()
-        if not key:
-            ctx.fail(
-                f"Invalid format of `{param.name}` option: "
-                f"Parameter key cannot be an empty string."
-            )
-        value = itemlist[1].strip()
-        result[key] = _try_convert_to_numeric(value)
-    return result
-
-
 def _get_values_as_tuple(values: Iterable[str]) -> Tuple[str, ...]:
     return tuple(chain.from_iterable(value.split(",") for value in values))
-
-
-def _config_callback(
-    ctx: click.Context,
-    _param: click.Parameter,
-    value: click.Path,
-) -> click.Path:
-    import anyconfig  # pylint: disable=import-outside-toplevel
-
-    if not isinstance(ctx.default_map, dict):
-        ctx.default_map = {}
-    section = ctx.info_name
-    if value:
-        config = anyconfig.load(value)[section]
-        ctx.default_map.update(config)
-    return value
 
 
 @click.group(context_settings=CONTEXT_SETTINGS, name=__file__)
@@ -130,17 +73,28 @@ def cli() -> None:
 
 
 @cli.command()
+def lint() -> None:
+    """Lint the project with black, isort, mypy, and pylint"""
+    subprocess.run(args=["black", "src"], check=True)
+    subprocess.run(args=["isort", "src"], check=True)
+    subprocess.run(
+        args=["mypy", "--strict", "--ignore-missing-imports", "src"], check=False
+    )
+    subprocess.run(args=["pylint", "src"], check=False)
+
+
+@cli.command()
 @click.option(
-    "--from-inputs", type=str, default="", help=FROM_INPUTS_HELP, callback=_split_string
+    "--from-inputs", type=str, default="", help=FROM_INPUTS_HELP, callback=split_string
 )
 @click.option(
-    "--to-outputs", type=str, default="", help=TO_OUTPUTS_HELP, callback=_split_string
+    "--to-outputs", type=str, default="", help=TO_OUTPUTS_HELP, callback=split_string
 )
 @click.option(
-    "--from-nodes", type=str, default="", help=FROM_NODES_HELP, callback=_split_string
+    "--from-nodes", type=str, default="", help=FROM_NODES_HELP, callback=split_string
 )
 @click.option(
-    "--to-nodes", type=str, default="", help=TO_NODES_HELP, callback=_split_string
+    "--to-nodes", type=str, default="", help=TO_NODES_HELP, callback=split_string
 )
 @click.option("--node", "node_names", type=str, multiple=True, help=NODE_HELP)
 @click.option("--tag", type=str, multiple=True, help=TAG_HELP)
@@ -155,7 +109,7 @@ def cli() -> None:
     "--config",
     type=click.Path(exists=True, dir_okay=False, resolve_path=True),
     help=CONFIG_HELP,
-    callback=_config_callback,
+    callback=_config_file_callback,
 )
 def run(
     from_inputs: Iterable[str],
@@ -189,7 +143,3 @@ def run(
             to_outputs=to_outputs,
             pipeline_name=pipeline,
         )
-
-
-cli.add_command(catalog_group)
-cli.add_command(pipeline_group)

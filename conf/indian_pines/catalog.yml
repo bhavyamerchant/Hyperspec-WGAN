@@ -1,20 +1,20 @@
-# Raw
-raw_image:
+# Raw #
+raw_matlab_image:
   type: hyperspec_wgan.extras.datasets.matlab.MatlabDataSet
   filepath: data/01_raw/indian_pines/image.mat
-raw_ground_truth:
+raw_matlab_ground_truth:
   type: hyperspec_wgan.extras.datasets.matlab.MatlabDataSet
   filepath: data/01_raw/indian_pines/ground_truth.mat
 
-# Intermediate
-intermediate_x:
+# Intermediate #
+intermediate_image:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
-  filepath: data/02_intermediate/indian_pines/x.npy
-intermediate_y:
+  filepath: data/02_intermediate/indian_pines/image.npy
+intermediate_ground_truth:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
-  filepath: data/02_intermediate/indian_pines/y.npy
+  filepath: data/02_intermediate/indian_pines/ground_truth.npy
 
-# Primary
+# Primary #
 primary_classified_x:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
   filepath: data/03_primary/indian_pines/classified_x.npy
@@ -28,7 +28,27 @@ primary_unclassified_y:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
   filepath: data/03_primary/indian_pines/unclassified_y.npy
 
-# Model Output
+# Model Input #
+model_input_classified_x_train:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/05_model_input/indian_pines/1dcnn/classified_x_train.npy
+model_input_classified_x_test:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/05_model_input/indian_pines/1dcnn/classified_x_test.npy
+model_input_classified_x_valid:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/05_model_input/indian_pines/1dcnn/classified_x_valid.npy
+model_input_classified_y_train:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/05_model_input/indian_pines/1dcnn/classified_y_train.npy
+model_input_classified_y_test:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/05_model_input/indian_pines/1dcnn/classified_y_test.npy
+model_input_classified_y_valid:
+  type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
+  filepath: data/05_model_input/indian_pines/1dcnn/classified_y_valid.npy
+
+# Model Output #
 model_output_pca_x:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
   filepath: data/07_model_output/indian_pines/pca_x.npy
@@ -38,8 +58,8 @@ model_output_pca_variance:
 model_output_tsne_x:
   type: hyperspec_wgan.extras.datasets.numpy.NumpyDataSet
   filepath: data/07_model_output/indian_pines/tsne_x.npy
-
-# Reporting
+  
+# Reporting #
 reporting_pca:
   type: matplotlib.MatplotlibWriter
   filepath: data/08_reporting/indian_pines/pca_projection.svg

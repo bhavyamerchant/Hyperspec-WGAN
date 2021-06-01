@@ -28,28 +28,13 @@
 
 """Node definitions for data visualization tasks."""
 
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import numpy as np
 import seaborn as sns
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
-
-
-def _plot_scatterplot(
-    x: np.ndarray, y: np.ndarray, palette: Dict[str, str], aspect: List[float]
-) -> sns.FacetGrid:
-    return sns.relplot(
-        x=x[:, 0],
-        y=x[:, 1],
-        hue=y,
-        palette=palette,
-        legend=False,
-        height=aspect[1],
-        aspect=aspect[0] / aspect[1],
-        linewidth=0,
-    )
 
 
 def _plot_colorbar(figure: Figure, palette: List[str], labels: List[str]) -> None:
@@ -72,21 +57,25 @@ def plot_pca(
     x: np.ndarray,
     y: np.ndarray,
     variance: np.ndarray,
-    scene_name: str,
-    labels: Dict[str, str],
-    palette: Dict[str, str],
-    aspect: List[float],
+    metadata: Dict[str, Any],
+    kwargs: Dict[str, Any],
 ) -> sns.FacetGrid:
     """Plot the PCA results."""
     with sns.plotting_context(context="paper"):
-        graph = _plot_scatterplot(x=x, y=y, palette=palette, aspect=aspect)
+        graph = sns.relplot(
+            x=x[:, 0],
+            y=x[:, 1],
+            hue=y,
+            palette=metadata["palette"],
+            **kwargs["relplot_kwargs"],
+        )
         _plot_colorbar(
             figure=graph.fig,
-            palette=[*palette.values()][1:],
-            labels=[*labels.values()][1:],
+            palette=[*metadata["palette"].values()][1:],
+            labels=[*metadata["labels"].values()][1:],
         )
         graph.set(
-            title=f"{scene_name} PCA Projection",
+            title=f'{metadata["name"]} PCA Projection',
             xlabel=f"Principal Component 1 - {variance[0]*100:.1f}% Explained Variance",
             xticks=[],
             ylabel=f"Principal Component 2 - {variance[1]*100:.1f}% Explained Variance",
@@ -98,21 +87,25 @@ def plot_pca(
 def plot_tsne(
     x: np.ndarray,
     y: np.ndarray,
-    scene_name: str,
-    labels: Dict[str, str],
-    palette: Dict[str, str],
-    aspect: List[float],
+    metadata: Dict[str, Any],
+    kwargs: Dict[str, Any],
 ) -> sns.FacetGrid:
     """Plot the t-SNE results."""
     with sns.plotting_context(context="paper"):
-        graph = _plot_scatterplot(x=x, y=y, palette=palette, aspect=aspect)
+        graph = sns.relplot(
+            x=x[:, 0],
+            y=x[:, 1],
+            hue=y,
+            palette=metadata["palette"],
+            **kwargs["relplot_kwargs"],
+        )
         _plot_colorbar(
             figure=graph.fig,
-            palette=[*palette.values()][1:],
-            labels=[*labels.values()][1:],
+            palette=[*metadata["palette"].values()][1:],
+            labels=[*metadata["labels"].values()][1:],
         )
         graph.set(
-            title=f"{scene_name} t-SNE Projection",
+            title=f'{metadata["name"]} t-SNE Projection',
             xlabel="t-SNE Component 1",
             xticks=[],
             ylabel="t-SNE Component 2",

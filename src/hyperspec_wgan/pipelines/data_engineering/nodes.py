@@ -28,31 +28,38 @@
 
 """Node definitions for data engineering tasks."""
 
-from typing import Any, Dict
+from typing import Dict
 
 import numpy as np
-from sklearn.preprocessing import maxabs_scale
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import maxabs_scale, minmax_scale, robust_scale
+from sklearn.preprocessing import scale as standard_scale
 
 
-def extract(data: Dict[str, np.ndarray]) -> np.ndarray:
-    """Extract NumPy data from a `dict`."""
-    return list(data.values())[-1]
+def extract(matlab_data: Dict[str, np.ndarray]) -> np.ndarray:
+    """Extract image data from the last value in a `dict`."""
+    image = list(matlab_data.values())[-1]
+    return image
 
 
-def reshape(x: np.ndarray, y: np.ndarray) -> Dict[str, np.ndarray]:
-    """Reshape the samples into a 2-D array and the classifications into a 1-D array."""
-    x = np.reshape(a=x, newshape=(-1, x.shape[2]))
-    y = np.reshape(a=y, newshape=-1)
-    return dict(x=x, y=y)
+def scale(image: np.ndarray, kwargs: Dict[str, str]) -> np.ndarray:
+    """Scale an image using the desired scaling function."""
+    x = np.reshape(a=image, newshape=(-1, image.shape[2]))
+    switch = {
+        "standard": standard_scale(X=x, **kwargs["standard_scale_kwargs"]),
+        "maxabs": maxabs_scale(X=x, **kwargs["maxabs_scale_kwargs"]),
+        "minmax": minmax_scale(X=x, **kwargs["minmax_scale_kwargs"]),
+        "robust": robust_scale(X=x, **kwargs["robust_scale_kwargs"]),
+        "none": x,
+    }
+    scale_image = np.reshape(a=switch[kwargs["scaler"]], newshape=image.shape)
+    return scale_image
 
 
-def scale(x: np.ndarray) -> Any:
-    """Scale samples to the [-1, 1] range without breaking the sparsity."""
-    return maxabs_scale(X=x)
-
-
-def separate(x: np.ndarray, y: np.ndarray) -> Dict[str, np.ndarray]:
-    """Separate classified and unclassified samples within the dataset."""
+def separate(image: np.ndarray, ground_truth: np.ndarray) -> Dict[str, np.ndarray]:
+    """Separate classified and unclassified samples."""
+    x = np.reshape(a=image, newshape=(-1, image.shape[2]))
+    y = np.reshape(a=ground_truth, newshape=-1)
     classified_x = x[y != 0, :]
     unclassified_x = x[y == 0, :]
     classified_y = y[y != 0]
@@ -62,4 +69,30 @@ def separate(x: np.ndarray, y: np.ndarray) -> Dict[str, np.ndarray]:
         unclassified_x=unclassified_x,
         classified_y=classified_y,
         unclassified_y=unclassified_y,
+    )
+
+
+def split(
+    x: np.ndarray,
+    y: np.ndarray,
+    kwargs: Dict[str, float],
+) -> Dict[str, np.ndarray]:
+    """Split the dataset into training, testing, and validation datasets."""
+    x_train, x_rest, y_train, y_rest = train_test_split(
+        x, y, train_size=kwargs["train_ratio"], random_state=42, stratify=y
+    )
+    x_test, x_valid, y_test, y_valid = train_test_split(
+        x_rest,
+        y_rest,
+        train_size=(0.1 / (kwargs["test_ratio"] + kwargs["valid_ratio"])),
+        random_state=42,
+        stratify=y_rest,
+    )
+    return dict(
+        x_train=x_train,
+        x_test=x_test,
+        x_valid=x_valid,
+        y_train=y_train,
+        y_test=y_test,
+        y_valid=y_valid,
     )

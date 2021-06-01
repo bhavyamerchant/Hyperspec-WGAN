@@ -35,26 +35,13 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
 
-def fit_pca(x: np.ndarray, n_components: float, whiten: bool) -> Dict[str, np.ndarray]:
+def fit_pca(x: np.ndarray, kwargs: Dict[str, Any]) -> Dict[str, Any]:
     """Fit a PCA model to the data."""
-    model = PCA(n_components=n_components, whiten=whiten)
+    model = PCA(**kwargs["PCA_kwargs"])
     return dict(x=model.fit_transform(X=x), variance=model.explained_variance_ratio_)
 
 
-def fit_tsne(
-    x: np.ndarray,
-    perplexity: float,
-    early_exaggeration: int,
-    learning_rate: float,
-    iterations: int,
-) -> Any:
+def fit_tsne(x: np.ndarray, kwargs: Dict[str, Any]) -> Any:
     """Fit a t-SNE model to the data."""
-    model = TSNE(
-        perplexity=perplexity,
-        early_exaggeration=early_exaggeration,
-        learning_rate=learning_rate,
-        n_iter=iterations,
-        random_state=42,
-        n_jobs=-1,
-    )
+    model = TSNE(**kwargs["TSNE_kwargs"])
     return model.fit_transform(X=x)

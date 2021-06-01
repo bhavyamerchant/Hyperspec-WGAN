@@ -1,27 +1,24 @@
-# Kedro Project #
-
-## Ignore potentially sensitive credentials files ##
+# Ignore potentially sensitive credentials files #
 conf/**/*credentials*
 
-## Ignore everything in the following folders except their sub-folders ##
+# Ignore everything in the following folders except their sub-folders #
 data/**
 logs/**
 !data/**/
 !logs/**/
 
-## Ignore logs in root folder ##
+# Ignore logs in root folder #
 info.log
 
-## Keep all .gitkeep files ##
+# Keep all .gitkeep files #
 !.gitkeep
 
-# Common files #
-
-## mypy ##
+# Ignore mypy cache #
 .mypy_cache/
 
-## Poetry ##
-poetry.lock
+# Ignore Poetry files #
+.venv/
+poetry.toml
 
-## Python byte-compiled files ##
+# Ignore Python cache #
 __pycache__/

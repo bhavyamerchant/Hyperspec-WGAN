@@ -31,7 +31,7 @@
 from kedro.pipeline.node import node
 from kedro.pipeline.pipeline import Pipeline
 
-from .nodes import extract, reshape, scale, separate
+from .nodes import extract, scale, separate, split
 
 
 def data_engineering_pipeline() -> Pipeline:
@@ -40,46 +40,57 @@ def data_engineering_pipeline() -> Pipeline:
         nodes=[
             node(
                 func=extract,
-                inputs="raw_image",
-                outputs="intermediate_x",
+                inputs="raw_matlab_image",
+                outputs="intermediate_image",
                 name="extract-image",
-                tags=["pca", "tsne"],
+                tags=["pca", "tsne", "tcn"],
             ),
             node(
                 func=extract,
-                inputs="raw_ground_truth",
-                outputs="intermediate_y",
+                inputs="raw_matlab_ground_truth",
+                outputs="intermediate_ground_truth",
                 name="extract-ground-truth",
-                tags=["pca", "tsne"],
-            ),
-            node(
-                func=reshape,
-                inputs={
-                    "x": "intermediate_x",
-                    "y": "intermediate_y",
-                },
-                outputs={"x": "reshape_x", "y": "reshape_y"},
-                name="reshape-intermediate-dataset",
-                tags=["pca", "tsne"],
+                tags=["pca", "tsne", "tcn"],
             ),
             node(
                 func=scale,
-                inputs="reshape_x",
-                outputs="scale_x",
-                name="scale-samples",
-                tags=["pca", "tsne"],
+                inputs={"image": "intermediate_image", "kwargs": "params:scale"},
+                outputs="scale_image",
+                name="scale-image",
+                tags=["pca", "tsne", "tcn"],
             ),
             node(
                 func=separate,
-                inputs={"x": "scale_x", "y": "reshape_y"},
+                inputs={
+                    "image": "scale_image",
+                    "ground_truth": "intermediate_ground_truth",
+                },
                 outputs={
                     "classified_x": "primary_classified_x",
                     "unclassified_x": "primary_unclassified_x",
                     "classified_y": "primary_classified_y",
                     "unclassified_y": "primary_unclassified_y",
                 },
-                name="separate-data",
-                tags=["pca", "tsne"],
+                name="separate-classified-and-unclassified-samples",
+                tags=["pca", "tsne", "tcn"],
+            ),
+            node(
+                func=split,
+                inputs={
+                    "x": "primary_classified_x",
+                    "y": "primary_classified_y",
+                    "kwargs": "params:split",
+                },
+                outputs={
+                    "x_train": "model_input_classified_x_train",
+                    "x_test": "model_input_classified_x_test",
+                    "x_valid": "model_input_classified_x_valid",
+                    "y_train": "model_input_classified_y_train",
+                    "y_test": "model_input_classified_y_test",
+                    "y_valid": "model_input_classified_y_valid",
+                },
+                name="split-dataset",
+                tags="tcn",
             ),
         ]
     )

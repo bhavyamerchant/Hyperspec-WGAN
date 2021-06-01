@@ -42,8 +42,7 @@ def data_science_pipeline() -> Pipeline:
                 func=fit_pca,
                 inputs={
                     "x": "primary_classified_x",
-                    "n_components": "params:n_components",
-                    "whiten": "params:whiten",
+                    "kwargs": "params:fit_pca",
                 },
                 outputs={
                     "x": "model_output_pca_x",
@@ -56,10 +55,7 @@ def data_science_pipeline() -> Pipeline:
                 func=fit_tsne,
                 inputs={
                     "x": "primary_classified_x",
-                    "perplexity": "params:perplexity",
-                    "early_exaggeration": "params:early_exaggeration",
-                    "learning_rate": "params:learning_rate",
-                    "iterations": "params:iterations",
+                    "kwargs": "params:fit_tsne",
                 },
                 outputs="model_output_tsne_x",
                 name="fit-tsne",

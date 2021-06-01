@@ -38,12 +38,12 @@ from kedro.io.data_catalog import DataCatalog
 class ProjectHooks:
     """Hook the project's config files and data catalog."""
 
-    @hook_impl
+    @hook_impl  # type: ignore
     def register_config_loader(self, conf_paths: Iterable[str]) -> ConfigLoader:
         """Register the project's config files."""
         return ConfigLoader(conf_paths=conf_paths)
 
-    @hook_impl
+    @hook_impl  # type: ignore
     def register_catalog(
         self,
         catalog: Optional[Dict[str, Dict[str, Any]]],

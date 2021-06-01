@@ -1,24 +1,24 @@
-# Data Visualization Parameters
-scene_name: Pavia University
-labels:
-  0: Unlabeled
-  1: Asphalt
-  2: Meadows
-  3: Gravel
-  4: Trees
-  5: Painted metal sheets
-  6: Bare Soil
-  7: Bitumen
-  8: Self-Blocking Bricks
-  9: Shadows
-graph_palette:
-  0: "#FFF9D9"
-  1: "#D7D4BF"
-  2: "#AFAFA6"
-  3: "#888B8D"
-  4: "#A84D5D"
-  5: "#C8102E"
-  6: "#DF6717"
-  7: "#F6BE00"
-  8: "#7BB844"
-  9: "#00B388"
+metadata:
+  name: Pavia University
+  labels:
+    0: Unlabeled
+    1: Asphalt
+    2: Meadows
+    3: Gravel
+    4: Trees
+    5: Painted metal sheets
+    6: Bare Soil
+    7: Bitumen
+    8: Self-Blocking Bricks
+    9: Shadows
+  palette:
+    0: "#FFF9D9"
+    1: "#D7D4BF"
+    2: "#AFAFA6"
+    3: "#888B8D"
+    4: "#A84D5D"
+    5: "#C8102E"
+    6: "#DF6717"
+    7: "#F6BE00"
+    8: "#7BB844"
+    9: "#00B388"

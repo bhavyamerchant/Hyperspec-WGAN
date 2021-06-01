@@ -42,10 +42,10 @@ from hyperspec_wgan.pipelines.data_visualization.pipeline import (
 def register_pipelines() -> Dict[str, Pipeline]:
     """Register the project's pipelines."""
     return {
-        "data_engineering": data_engineering_pipeline(),
-        "data_science": data_science_pipeline(),
-        "data_visualization": data_visualization_pipeline(),
         "__default__": data_engineering_pipeline()
         + data_science_pipeline()
         + data_visualization_pipeline(),
+        "data_engineering": data_engineering_pipeline(),
+        "data_science": data_science_pipeline(),
+        "data_visualization": data_visualization_pipeline(),
     }

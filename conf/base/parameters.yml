@@ -1,16 +1,39 @@
-# Data Science Pipeline #
+# Data Engineering #
+scale:
+  standard_scale_kwargs: {}
+  maxabs_scale_kwargs: {}
+  minmax_scale_kwargs: {}
+  robust_scale_kwargs: {}
+  scaler: maxabs
+split:
+  test_ratio: 0.6
+  train_ratio: 0.25
+  valid_ratio: 0.15
 
-## fit-pca ##
-n_components: 15
-whiten: True
+# Data Science #
+fit_pca:
+  PCA_kwargs:
+    n_components: 15
+    whiten: True
+fit_tsne:
+  TSNE_kwargs:
+    early_exaggeration: 10
+    learning_rate: 250
+    n_iter: 500
+    n_jobs: -1
+    perplexity: 15
+    random_state: 42
 
-## fit-tsne ##
-perplexity: 15
-early_exaggeration: 10
-learning_rate: 250
-iterations: 500
-
-# Data Visualization Parameters #
-graph_aspect: 
-  - 6.5
-  - 4.5
+# Data Visualization #
+plot_pca:
+  relplot_kwargs:
+    aspect: 1.444
+    linewidth: 0
+    legend: False
+    height: 4.5
+plot_tsne:
+  relplot_kwargs:
+    aspect: 1.444
+    linewidth: 0
+    legend: False
+    height: 4.5

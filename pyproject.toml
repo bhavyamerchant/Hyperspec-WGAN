@@ -9,11 +9,11 @@ known_third_party = "kedro"
 [tool.kedro]
 package_name = "hyperspec_wgan"
 project_name = "hyperspec-wgan"
-project_version = "0.17.2"
+project_version = "0.17.3"
 
 [tool.poetry]
 name = "hyperspec-wgan"
-version = "0.2.0"
+version = "0.2.1"
 description = "Data Augmentation using a Generative Adversarial Network for Improved HSI Classification"
 authors = ["bhavyamerchant <collaboratory@bnmerchant.com>"]
 license = "MIT"
@@ -21,7 +21,6 @@ license = "MIT"
 [tool.poetry.dependencies]
 kedro = "*"
 kedro-viz = {version = "*", optional = true}
-numpy = "*"
 python = "~3.8"
 scikit-learn = "*"
 seaborn = "*"
@@ -37,5 +36,4 @@ pylint = "*"
 max-line-length = "88"
 
 [tool.pylint.messages_control]
-disable = "duplicate-code, no-self-use, too-many-arguments"
 good-names = "x, y"
